@@ -1,13 +1,5 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
+# Build dir
+build
+# Binary file
+xsq-convert
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
