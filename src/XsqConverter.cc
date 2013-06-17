@@ -3,6 +3,7 @@
 // (See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT)
 
 #include "XsqConverter.hh"
+#include <memory>
 
 auto XsqConverter::convert(const fs::path& input_file, const fs::path& output_dir, const boost::optional<std::vector<std::string>>& prefixes_wanted) -> void
 {
@@ -19,7 +20,6 @@ auto XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 		csfasta_ofs_buffers[tag_name] = new char[BUFFERS_SIZE];
 	}
 
-	// Get libraries to extract
 	const auto& libraries = prefixes_wanted ? 
 		file.get_libraries_by_prefix(*prefixes_wanted) : file.get_libraries();
 
@@ -32,27 +32,27 @@ auto XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 		fs::create_directory(library_output_dir);
 
 		// Create and open csfasta and qval output files
-		std::map<std::string, std::ofstream*> qual_ofs;
-		std::map<std::string, std::ofstream*> csfasta_ofs;
+		std::map<std::string, std::unique_ptr<std::ofstream>> qual_ofs;
+		std::map<std::string, std::unique_ptr< std::ofstream>> csfasta_ofs;
 		
 		for(const auto& tag_name: used_tags_names)
 		{
-			// Prefix shared by the csfasta and the qual file
 			const std::string& library_output_filename = 
 				file.get_path().stem().string() + '_' + library.get_complete_name() + '_' + tag_name;
 
-			// Create the qual file
 			const fs::path& output_qual_file_path =
 				library_output_dir / fs::path(library_output_filename + QUAL_FILE_EXT);
 	
-			// Create the csfasta file
 			const fs::path& output_csfasta_file_path =
 				library_output_dir / fs::path(library_output_filename + CSFASTA_FILE_EXT);
 
-			// Create streams and make them use buffers
-			qual_ofs[tag_name] = new std::ofstream(output_qual_file_path.string().c_str());
+			// Create streams
+			qual_ofs[tag_name] = std::unique_ptr<std::ofstream>(new std::ofstream());
+			qual_ofs[tag_name]->open(output_qual_file_path.string().c_str());
+
+			// Make streams use buffers
 			qual_ofs[tag_name]->rdbuf()->pubsetbuf(qual_ofs_buffers[tag_name], BUFFERS_SIZE);
-			csfasta_ofs[tag_name] = new std::ofstream(output_csfasta_file_path.string().c_str());
+			csfasta_ofs[tag_name] = std::unique_ptr<std::ofstream>(new std::ofstream(output_csfasta_file_path.string().c_str()));
 			qual_ofs[tag_name]->rdbuf()->pubsetbuf(csfasta_ofs_buffers[tag_name], BUFFERS_SIZE);
 		}
 
@@ -74,13 +74,10 @@ auto XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 			}
 		}
 
-		// Close output streams and deallocate memory
 		for(const auto& tag_name: used_tags_names)
 		{
 			qual_ofs[tag_name]->close();
-			delete qual_ofs[tag_name];
 			csfasta_ofs[tag_name]->close();
-			delete csfasta_ofs[tag_name];
 		}
 
 	}
@@ -100,7 +97,6 @@ auto XsqConverter::convert_reads(const Xsq::Reads& reads, std::ofstream& qual_of
 				
 	for (unsigned read_id = 0; read_id < nb_reads; read_id++)
 	{
-		// Create read header
 		const auto& location =
 			yxLocation.get_location(read_id);
 		const std::string& read_header =
@@ -149,15 +145,11 @@ auto XsqConverter::convert_reads(const Xsq::Reads& reads, std::ofstream& qual_of
 	}
 }
 
-/**
- * File extensions used for csfasta and qual files
- */
 const std::string XsqConverter::QUAL_FILE_EXT = ".QV.qual";
 const std::string XsqConverter::CSFASTA_FILE_EXT = ".csfasta";
 
-/*
- * Map CallQV -> qv
- */
+// Map CallQV -> qv
+// 
 const char* XsqConverter::qv_map[256] = {
 	"0 ","0 ","0 ","0 ","1 ","1 ","1 ","1 ","2 ","2 ","2 ","2 ","3 ","3 ","3 ","3 ",
 	"4 ","4 ","4 ","4 ","5 ","5 ","5 ","5 ","6 ","6 ","6 ","6 ","7 ","7 ","7 ","7 ",
@@ -177,9 +169,6 @@ const char* XsqConverter::qv_map[256] = {
 	"60 ","60 ","60 ","60 ","61 ","61 ","61 ","61 ","62 ","62 ","62 ","62 ","63 ","63 ","63 ","63 "
 };
 
-/**
- * Map CallQV -> color
- */
 const char XsqConverter::cs_map[256] = {
 	'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '0', '1', '2', '3',
 	'0', '1', '2', '3', '0', '1', '2', '3', '0', '1', '2', '3', '0', '1', '2', '3',
