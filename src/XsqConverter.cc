@@ -49,10 +49,11 @@ auto XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 			// Create streams
 			qual_ofs[tag_name] = std::unique_ptr<std::ofstream>(new std::ofstream());
 			qual_ofs[tag_name]->open(output_qual_file_path.string().c_str());
+			csfasta_ofs[tag_name] = std::unique_ptr<std::ofstream>(new std::ofstream());
+			csfasta_ofs[tag_name]->open(output_csfasta_file_path.string().c_str());
 
 			// Make streams use buffers
 			qual_ofs[tag_name]->rdbuf()->pubsetbuf(qual_ofs_buffers[tag_name], BUFFERS_SIZE);
-			csfasta_ofs[tag_name] = std::unique_ptr<std::ofstream>(new std::ofstream(output_csfasta_file_path.string().c_str()));
 			qual_ofs[tag_name]->rdbuf()->pubsetbuf(csfasta_ofs_buffers[tag_name], BUFFERS_SIZE);
 		}
 
