@@ -1,7 +1,7 @@
 #ifndef TAG_HH
 #define TAG_HH
 
-// (C) Copyright 2013 Florian Plaza Oñate
+// (C) Copyright 2013-2014 INRA
 // Use, modification and distribution is subject to the MIT License (MIT)
 // (See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT)
 
