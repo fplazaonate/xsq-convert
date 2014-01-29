@@ -31,14 +31,15 @@ Parameters get_parameters(int argc, char *argv[])
 	// Retrieve and parse command line parameters
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, opts_desc), vm);
-	po::notify(vm);
 
 	// Print help
-	if (vm.size() == 1 || vm.count("help"))
+	if (argc == 1 || vm.count("help"))
 	{
 		std::cout << opts_desc << std::endl;
 		std::exit(0);
 	}
+
+	po::notify(vm);
 
 	// Check input file
 	if (!fs::exists(pars.input_file))
