@@ -22,17 +22,17 @@ namespace Xsq
 	public:
 		Library(const std::string& name, const H5::Group& group);
 
-		auto get_complete_name() const -> const std::string&
+		const std::string& get_complete_name() const
 		{
 			return m_complete_name;
 		}
 
-		auto get_sample_name() const -> const std::string&
+		const std::string& get_sample_name() const
 		{
 			return m_sample_name;
 		}
 
-		auto get_tiles() const -> std::vector<Tile>;
+		std::vector<Tile> get_tiles() const;
 	};
 }
 #endif // LIBRARY_HH

@@ -24,17 +24,17 @@ namespace Xsq
 		Tag(const std::string& name, const H5::Group& group)
 			: m_name(name), m_group(group){};
 
-		auto get_name() const -> const std::string& 
+		const std::string&  get_name() const
 		{
 			return m_name;
 		}
 
-		auto get_start_nucleotide() const -> char
+		char get_start_nucleotide() const
 		{
 			return s_tags_start.find(m_name)->second;
 		}
 
-		auto get_reads() const -> Reads;
+		Reads get_reads() const;
 	};
 }
 #endif // TAG_HH

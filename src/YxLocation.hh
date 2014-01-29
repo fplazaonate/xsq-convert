@@ -35,12 +35,12 @@ namespace Xsq
 			delete [] m_data;
 		}
 
-		auto get_location(unsigned i) const -> std::pair<uint16_t, uint16_t>
+		std::pair<uint16_t, uint16_t> get_location(unsigned i) const
 		{
 			return std::make_pair(m_data[i*2], m_data[i*2+1]);
 		}
 
-		auto get_nb_locations() const -> unsigned
+		unsigned get_nb_locations() const
 		{
 			return m_nb_locations;
 		}

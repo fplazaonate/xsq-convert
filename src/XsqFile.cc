@@ -9,7 +9,7 @@ using namespace Xsq;
 * Method which returns a list of all the libraries in this XsqFile
 * except those which are unclassified or unassigned.
 */
-auto XsqFile::get_libraries() const -> std::vector<Library>
+std::vector<Library> XsqFile::get_libraries() const
 {
 	std::vector<Library> libraries;
 
@@ -28,7 +28,7 @@ auto XsqFile::get_libraries() const -> std::vector<Library>
 * Method which returns a list of all the libraries in this XsqFile
 * whose name is prefixed by one of the elements in the prefixes_wanted list.
 */
-auto XsqFile::get_libraries_by_prefix(const std::vector<std::string>& prefixes_wanted) const -> std::vector<Library>
+std::vector<Library> XsqFile::get_libraries_by_prefix(const std::vector<std::string>& prefixes_wanted) const
 {
 	std::vector<Library> libraries;
 
@@ -50,7 +50,7 @@ auto XsqFile::get_libraries_by_prefix(const std::vector<std::string>& prefixes_w
 * Method which returns a vector of all the tags used in this XsqFile.
 * e.g: 'F3', 'R3'
 */
-auto XsqFile::get_used_tags_names() const -> std::vector<std::string> 
+std::vector<std::string> XsqFile::get_used_tags_names() const
 {
 	const auto& run_metadata_group = m_file.openGroup("RunMetadata");
 	const auto& tag_details_group = run_metadata_group.openGroup("TagDetails");

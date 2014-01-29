@@ -7,13 +7,13 @@
 #include <exception>
 #include <new>
 
-auto no_more_memory() -> void
+void no_more_memory()
 {
 	std::cerr << "error: Memory allocation failed." << std::endl;
 	std::exit (1);
 }
 
-auto main(int argc, char *argv[]) -> int
+int main(int argc, char *argv[])
 {
 	std::set_new_handler(no_more_memory);
 

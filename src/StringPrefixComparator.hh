@@ -19,7 +19,7 @@ public:
 	StringPrefixComparator(const std::string& s)
 		:  m_s(s){};
 
-	auto operator()(const std::string& prefix) const -> bool
+	bool operator()(const std::string& prefix) const
 	{
 		return boost::starts_with(m_s, prefix);
 	}

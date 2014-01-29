@@ -11,7 +11,7 @@ Library::Library(const std::string& name, const H5::Group& group)
 	const auto& sample_name_type = sample_name_attribute.getDataType();
 	sample_name_attribute.read(sample_name_type, m_sample_name);
 }
-auto Library::get_tiles() const -> std::vector<Tile> 
+std::vector<Tile>  Library::get_tiles() const
 {
 	std::vector<Tile> tiles;
 

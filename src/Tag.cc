@@ -5,7 +5,7 @@
 #include "Tag.hh"
 using namespace Xsq;
 
-auto Tag::get_reads() const -> Reads
+Reads Tag::get_reads() const
 {
 	H5::DataSet color_call_qv_ds = m_group.openDataSet("ColorCallQV");
 	return Reads(color_call_qv_ds);

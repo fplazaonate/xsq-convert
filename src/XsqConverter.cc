@@ -5,7 +5,7 @@
 #include "XsqConverter.hh"
 #include <memory>
 
-auto XsqConverter::convert(const fs::path& input_file, const fs::path& output_dir, const boost::optional<std::vector<std::string>>& prefixes_wanted) -> void
+void XsqConverter::convert(const fs::path& input_file, const fs::path& output_dir, const boost::optional<std::vector<std::string>>& prefixes_wanted)
 {
 	Xsq::XsqFile file(input_file.string());
 	const auto& used_tags_names = file.get_used_tags_names();
@@ -91,7 +91,7 @@ auto XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 
 }
 
-auto XsqConverter::convert_reads(const Xsq::Reads& reads, std::ofstream& qual_ofs, std::ofstream& csfasta_ofs, const std::string& tile_name, const Xsq::YxLocation& yxLocation, const std::string& tag_name, char start_nucleotide) -> void
+void XsqConverter::convert_reads(const Xsq::Reads& reads, std::ofstream& qual_ofs, std::ofstream& csfasta_ofs, const std::string& tile_name, const Xsq::YxLocation& yxLocation, const std::string& tag_name, char start_nucleotide)
 {
 	unsigned nb_reads = reads.get_nb_reads();
 	unsigned reads_length = reads.get_reads_length();

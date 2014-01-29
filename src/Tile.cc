@@ -5,7 +5,7 @@
 #include "Tile.hh"
 using namespace Xsq;
 
-auto Tile::get_tags() const -> std::list<Tag>
+std::list<Tag> Tile::get_tags() const
 {
 	std::list<Tag> tags;
 
@@ -20,7 +20,7 @@ auto Tile::get_tags() const -> std::list<Tag>
 	return tags;
 }
 
-auto Tile::get_yxLocation() const -> YxLocation 
+YxLocation  Tile::get_yxLocation() const
 {
 	const auto& fragments_group = m_group.openGroup("Fragments");
 	const auto& yxLocation_ds = fragments_group.openDataSet("yxLocation");

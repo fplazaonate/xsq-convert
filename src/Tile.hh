@@ -29,14 +29,14 @@ namespace Xsq
 			boost::trim_left_if(m_name, boost::is_any_of("0"));
 		};
 
-		auto get_name() const -> const std::string&
+		const std::string& get_name() const
 		{
 			return m_name;
 		};
 
-		auto get_tags() const -> std::list<Tag>;
+		std::list<Tag> get_tags() const;
 
-		auto get_yxLocation() const -> YxLocation;
+		YxLocation get_yxLocation() const;
 	};
 }
 

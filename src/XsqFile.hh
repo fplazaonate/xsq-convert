@@ -36,16 +36,16 @@ namespace Xsq
 			m_file.close();
 		};
 
-		auto get_path() const-> fs::path
+		fs::path get_path() const
 		{
 			return m_path;
 		}
 
-		auto get_libraries() const -> std::vector<Library>;
+		std::vector<Library> get_libraries() const;
 
-		auto get_libraries_by_prefix(const std::vector<std::string>&) const -> std::vector<Library>;
+		std::vector<Library> get_libraries_by_prefix(const std::vector<std::string>&) const;
 
-		auto get_used_tags_names() const -> std::vector<std::string>;
+		std::vector<std::string> get_used_tags_names() const; 
 	};
 }
 
