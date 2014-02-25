@@ -16,7 +16,7 @@ OBJECTS = $(patsubst $(SRC_DIR)/%.cc, $(BUILD_DIR)/%.o, $(SRC))
 all: $(BUILD_DIR) $(EXEC) 
 
 $(EXEC): $(OBJECTS)
-	$(CC) $^ -o $@ ${LDFLAGS}
+	$(CC) $^ -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc
 	$(CC) $(CFLAGS) -c $< -o $@
