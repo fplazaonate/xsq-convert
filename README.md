@@ -4,7 +4,7 @@ xsq-convert converts Solid XSQ files to csfasta/qual files
 
 Requirements
 -------------
-- A C++11 compiler (tested with latest versions of Clang and g++)
+- A C++ compiler
 - [Boost C++ Libraries](http://www.boost.org)
 - [HDF5 cpp library](http://www.hdfgroup.org/HDF5/doc/cpplus_RM/)
 
