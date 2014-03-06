@@ -25,7 +25,7 @@ Parameters get_parameters(int argc, char *argv[])
 		("help,h", "print this help message")
 		("input-file,i", po::value<std::string>(&pars.input_file)->required(), "xsq file to convert")
 		("output-dir,o", po::value<std::string>(&pars.output_dir)->default_value("."), "directory in which cfasta and qval files are saved")
-		("extract-only", po::value<std::vector<std::string>>()->multitoken(), "extract only libraries whose name is prefixed by one of the args. (case sensitive)") 
+		("extract-only", po::value<std::vector<std::string> >()->multitoken(), "extract only libraries whose name is prefixed by one of the args. (case sensitive)") 
 		;
 
 	// Retrieve and parse command line parameters
@@ -74,7 +74,7 @@ Parameters get_parameters(int argc, char *argv[])
 
 	// No way to easily retrieve prefixes_wanted...
 	if (vm.count("extract-only"))
-		pars.prefixes_wanted = vm["extract-only"].as<std::vector<std::string>>();
+		pars.prefixes_wanted = vm["extract-only"].as<std::vector<std::string> >();
 
 	return pars;
 }

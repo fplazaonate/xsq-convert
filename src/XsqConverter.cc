@@ -3,27 +3,28 @@
 // (See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT)
 
 #include "XsqConverter.hh"
-#include <memory>
+#include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 
-void XsqConverter::convert(const fs::path& input_file, const fs::path& output_dir, const boost::optional<std::vector<std::string>>& prefixes_wanted)
+void XsqConverter::convert(const fs::path& input_file, const fs::path& output_dir, const boost::optional<std::vector<std::string> >& prefixes_wanted)
 {
 	Xsq::XsqFile file(input_file.string());
-	const auto& used_tags_names = file.get_used_tags_names();
+	const std::vector<std::string>& used_tags_names = file.get_used_tags_names();
 
 	std::map<std::string, char*> qual_ofs_buffers;
 	std::map<std::string, char*> csfasta_ofs_buffers;
 
 	// Create buffers for latter use in qual and csfasta ofstreams
-	for(const auto& tag_name: used_tags_names)
+	BOOST_FOREACH(const std::string& tag_name, used_tags_names)
 	{
 		qual_ofs_buffers[tag_name] = new char[BUFFERS_SIZE];
 		csfasta_ofs_buffers[tag_name] = new char[BUFFERS_SIZE];
 	}
 
-	const auto& libraries = prefixes_wanted ? 
+	const std::vector<Xsq::Library>& libraries = prefixes_wanted ? 
 		file.get_libraries_by_prefix(*prefixes_wanted) : file.get_libraries();
 
-	for(const auto& library: libraries)
+	BOOST_FOREACH(const Xsq::Library& library, libraries)
 	{
 		// Create the library output directory
 		const fs::path& library_output_dir
@@ -32,10 +33,10 @@ void XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 		fs::create_directory(library_output_dir);
 
 		// Create and open csfasta and qval output files
-		std::map<std::string, std::unique_ptr<std::ofstream>> qual_ofs;
-		std::map<std::string, std::unique_ptr< std::ofstream>> csfasta_ofs;
+		std::map<std::string, std::ofstream*> qual_ofs;
+		std::map<std::string, std::ofstream*> csfasta_ofs;
 		
-		for(const auto& tag_name: used_tags_names)
+		BOOST_FOREACH(const std::string& tag_name, used_tags_names)
 		{
 			const std::string& library_output_filename = 
 				file.get_path().stem().string() + '_' + library.get_complete_name() + '_' + tag_name;
@@ -47,9 +48,9 @@ void XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 				library_output_dir / fs::path(library_output_filename + CSFASTA_FILE_EXT);
 
 			// Create streams
-			qual_ofs[tag_name] = std::unique_ptr<std::ofstream>(new std::ofstream());
+			qual_ofs[tag_name] = new std::ofstream();
 			qual_ofs[tag_name]->open(output_qual_file_path.string().c_str());
-			csfasta_ofs[tag_name] = std::unique_ptr<std::ofstream>(new std::ofstream());
+			csfasta_ofs[tag_name] = new std::ofstream();
 			csfasta_ofs[tag_name]->open(output_csfasta_file_path.string().c_str());
 
 			// Make streams use buffers
@@ -61,13 +62,13 @@ void XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 		std::cout << "info: Extracting library " << library.get_complete_name() << ". Please wait..." << std::endl;
 
 		// Extract all reads of the library in csfasta and qval files
-		for(const auto& tile: library.get_tiles())
+		BOOST_FOREACH(const Xsq::Tile& tile, library.get_tiles())
 		{
 			const std::string& tile_name = tile.get_name();
 	
 			const Xsq::YxLocation& tile_yxLocation = tile.get_yxLocation();
 
-			for(const auto& tag: tile.get_tags())
+			BOOST_FOREACH(const Xsq::Tag& tag, tile.get_tags())
 			{
 				const std::string& tag_name = tag.get_name();
 				convert_reads(
@@ -75,15 +76,18 @@ void XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 			}
 		}
 
-		for(const auto& tag_name: used_tags_names)
+		BOOST_FOREACH(const std::string& tag_name, used_tags_names)
 		{
 			qual_ofs[tag_name]->close();
+			delete qual_ofs[tag_name];
+
 			csfasta_ofs[tag_name]->close();
+			delete csfasta_ofs_buffers[tag_name];
 		}
 
 	}
 
-	for(const auto& tag_name: used_tags_names)
+	BOOST_FOREACH(const std::string& tag_name, used_tags_names)
 	{
 		delete [] qual_ofs_buffers[tag_name];
 		delete [] csfasta_ofs_buffers[tag_name];
@@ -98,11 +102,12 @@ void XsqConverter::convert_reads(const Xsq::Reads& reads, std::ofstream& qual_of
 				
 	for (unsigned read_id = 0; read_id < nb_reads; read_id++)
 	{
-		const auto& location =
+		const std::pair<short unsigned, short unsigned>& location =
 			yxLocation.get_location(read_id);
 		const std::string& read_header =
 			'>' + tile_name + '_' +
-			std::to_string(location.first) + '_' + std::to_string(location.second) + '_' +
+			boost::lexical_cast<std::string>(location.first) + '_' +
+			boost::lexical_cast<std::string>(location.second) + '_' +
 			tag_name + '\n';
 
 		qual_ofs << read_header;
@@ -150,7 +155,6 @@ const std::string XsqConverter::QUAL_FILE_EXT = ".QV.qual";
 const std::string XsqConverter::CSFASTA_FILE_EXT = ".csfasta";
 
 // Map CallQV -> qv
-// 
 const char* XsqConverter::qv_map[256] = {
 	"0 ","0 ","0 ","0 ","1 ","1 ","1 ","1 ","2 ","2 ","2 ","2 ","3 ","3 ","3 ","3 ",
 	"4 ","4 ","4 ","4 ","5 ","5 ","5 ","5 ","6 ","6 ","6 ","6 ","7 ","7 ","7 ","7 ",

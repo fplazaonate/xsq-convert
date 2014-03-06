@@ -17,7 +17,7 @@ namespace fs = boost::filesystem;
 class XsqConverter
 {
 public:
-	void convert(const fs::path&, const fs::path&, const boost::optional<std::vector<std::string>>&);
+	void convert(const fs::path&, const fs::path&, const boost::optional<std::vector<std::string> >&);
 private:
 	void convert_reads(const Xsq::Reads&, std::ofstream&, std::ofstream&, const std::string&, const Xsq::YxLocation&, const std::string&, char);
 	static const char cs_map[256];

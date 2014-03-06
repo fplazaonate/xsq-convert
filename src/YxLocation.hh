@@ -4,8 +4,6 @@
 // (C) Copyright 2013-2014 INRA
 // Use, modification and distribution is subject to the MIT License (MIT)
 // (See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT)
-
-#include <cstdint>
 #include <utility>
 
 namespace Xsq
@@ -13,7 +11,7 @@ namespace Xsq
 	class YxLocation
 	{
 	private:
-		uint16_t* m_data;
+		unsigned short* m_data;
 		unsigned m_nb_locations;
 
 	public:
@@ -25,7 +23,7 @@ namespace Xsq
 
 			m_nb_locations = yxLocation_ds_dims[0];
 
-			m_data = new uint16_t[m_nb_locations*2];
+			m_data = new unsigned short[m_nb_locations*2];
 			yxLocation_ds.read(
 				m_data, H5::PredType::NATIVE_UINT16);
 		};
@@ -35,7 +33,7 @@ namespace Xsq
 			delete [] m_data;
 		}
 
-		std::pair<uint16_t, uint16_t> get_location(unsigned i) const
+		std::pair<unsigned short, unsigned short> get_location(unsigned i) const
 		{
 			return std::make_pair(m_data[i*2], m_data[i*2+1]);
 		}

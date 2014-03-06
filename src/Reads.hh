@@ -5,14 +5,12 @@
 // Use, modification and distribution is subject to the MIT License (MIT)
 // (See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT)
 
-#include <cstdint>
-
 namespace Xsq
 {
 	class Reads
 	{
 	private:
-		uint8_t* m_data;
+		unsigned char* m_data;
 		unsigned m_nb_reads;
 		unsigned m_reads_length;
 
@@ -26,7 +24,7 @@ namespace Xsq
 			m_nb_reads = color_call_qv_ds_dims[0];
 			m_reads_length = color_call_qv_ds_dims[1];
 
-			m_data = new uint8_t[m_nb_reads*m_reads_length];
+			m_data = new unsigned char[m_nb_reads*m_reads_length];
 			reads_ds.read(
 				 m_data, H5::PredType::NATIVE_UINT8);
 		};
@@ -36,7 +34,7 @@ namespace Xsq
 			delete [] m_data;
 		}
 
-		uint8_t* get_read(unsigned read_id) const
+		unsigned char* get_read(unsigned read_id) const
 		{
 			return m_data + read_id*m_reads_length;
 		}

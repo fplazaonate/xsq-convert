@@ -1,7 +1,7 @@
 EXEC = xsq-convert
 
 CC = g++
-CFLAGS = --std=c++0x -Wall -Wextra -O3 -march=native
+CFLAGS = -Wall -Wextra -O3 -march=native
 BOOST_LIBS= -lboost_filesystem -lboost_system -lboost_program_options
 HDF5_LIBS = -lhdf5_hl_cpp -lhdf5_cpp -lhdf5
 LDFLAGS = $(BOOST_LIBS) $(HDF5_LIBS)

@@ -11,7 +11,7 @@ std::list<Tag> Tile::get_tags() const
 
 	for (unsigned tag_id = 0; tag_id < m_group.getNumObjs(); tag_id++)
 	{
-		const auto& tile_name = m_group.getObjnameByIdx(tag_id);
+		const std::string& tile_name = m_group.getObjnameByIdx(tag_id);
 
 		if (tile_name != s_reserved_name)
 			tags.push_back(Tag(tile_name, m_group.openGroup(tile_name)));
@@ -22,8 +22,8 @@ std::list<Tag> Tile::get_tags() const
 
 YxLocation  Tile::get_yxLocation() const
 {
-	const auto& fragments_group = m_group.openGroup("Fragments");
-	const auto& yxLocation_ds = fragments_group.openDataSet("yxLocation");
+	const H5::Group& fragments_group = m_group.openGroup("Fragments");
+	const H5::DataSet& yxLocation_ds = fragments_group.openDataSet("yxLocation");
 	
 	return YxLocation(yxLocation_ds);
 }

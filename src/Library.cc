@@ -7,8 +7,8 @@ using namespace Xsq;
 Library::Library(const std::string& name, const H5::Group& group)
 	: m_complete_name(name), m_group(group)
 {
-	const auto& sample_name_attribute = m_group.openAttribute("LibraryName");
-	const auto& sample_name_type = sample_name_attribute.getDataType();
+	const H5::Attribute& sample_name_attribute = m_group.openAttribute("LibraryName");
+	const H5::DataType& sample_name_type = sample_name_attribute.getDataType();
 	sample_name_attribute.read(sample_name_type, m_sample_name);
 }
 std::vector<Tile>  Library::get_tiles() const
@@ -20,7 +20,7 @@ std::vector<Tile>  Library::get_tiles() const
 		
 	for (unsigned tile_id = 0; tile_id < nb_tiles; tile_id++)
 	{
-		const auto& tile_name = m_group.getObjnameByIdx(tile_id);
+		const std::string& tile_name = m_group.getObjnameByIdx(tile_id);
 		tiles.push_back(Tile(tile_name, m_group.openGroup(tile_name)));
 	}
 		
