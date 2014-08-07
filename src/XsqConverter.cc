@@ -82,7 +82,7 @@ void XsqConverter::convert(const fs::path& input_file, const fs::path& output_di
 			delete qual_ofs[tag_name];
 
 			csfasta_ofs[tag_name]->close();
-			delete csfasta_ofs_buffers[tag_name];
+			delete csfasta_ofs[tag_name];
 		}
 
 	}
