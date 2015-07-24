@@ -1,7 +1,7 @@
 #ifndef XSQ_FILE_HH
 #define XSQ_FILE_HH
 
-// (C) Copyright 2013-2014 INRA
+// (C) Copyright 2013-2015 INRA
 // Use, modification and distribution is subject to the MIT License (MIT)
 // (See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT)
 
