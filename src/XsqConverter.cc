@@ -114,31 +114,8 @@ void XsqConverter::convert_reads(const Xsq::Reads& reads, std::ofstream& qual_of
 		csfasta_ofs << read_header;
 		csfasta_ofs << start_nucleotide;
 
-		// Hackish handmade loop unrolling.
-		// 3-4% performance boost on big xsq files
 		uint8_t* read_data = reads.get_read(read_id);
-		unsigned i;
-		for (i = 0; i <= reads_length-4; i += 4)
-		{
-			unsigned values = *(unsigned*)(read_data+i);
-			uint8_t value[4];
-			value[0] = values & 0xff;
-			value[1] = (values >> 8) & 0xff;
-			value[2] = (values >> 16) & 0xff;
-			value[3] = (values >> 24) & 0xff;
-			
-			qual_ofs << qv_map[value[0]] 
-				<< qv_map[value[1]] 
-				<< qv_map[value[2]]
-				<< qv_map[value[3]];
-
-			csfasta_ofs << cs_map[value[0]]
-				<< cs_map[value[1]]
-				<< cs_map[value[2]]
-				<< cs_map[value[3]];
-		}
-
-		for (; i < reads_length; i++)
+		for (unsigned i = 0; i < reads_length; i++)
 		{
 			uint8_t value = read_data[i];
 
