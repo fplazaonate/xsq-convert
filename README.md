@@ -4,7 +4,8 @@ xsq-convert converts Solid XSQ files to csfasta/qual files
 
 Static executables
 -------------
-A Windows 64 bits executable is available [here](https://drive.google.com/file/d/0B4EkPQ4ESUlsTDgzN2dPdl9OeGs/edit?usp=sharing)
+- [Windows 64 bits](https://drive.google.com/file/d/0B4EkPQ4ESUlsTDgzN2dPdl9OeGs/edit?usp=sharing)
+- [Linux 64 bits](https://drive.google.com/file/d/0B4EkPQ4ESUlsNnF0aVQ0Sng3Rkk/view?usp=sharing)
 
 Compilation requirements
 -------------
